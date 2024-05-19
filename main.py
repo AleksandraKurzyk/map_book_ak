@@ -1,6 +1,6 @@
 from models.data_source import users
 from utils.crud import read_friends, add_user, search_user, remove_user, update_user
-from utils.emap import single_map, full_map
+from utils.e_map import single_map, full_map
 
 if __name__ == '__main__':
     while True:

@@ -1,25 +1,26 @@
-import requests
-from bs4 import BeautifulSoup
+import psycopg2 as ps
 
 
-class User:
-    def __init__(self, name, surname, posts, location):
-        self.name = name
-        self.surname = surname
-        self.posts = posts
-        self.location = location
-        self.wspolrzedne = User.wspolrzedne(self)
+db_params = ps.connect(
+	database="mapbook",
+	user="postgres",
+	password="geoinformatyka",
+	host="localhost",
+	port="5432"
+)
 
-    def wspolrzedne(self)->list:
-        url: str = f'https://pl.wikipedia.org/wiki/{self.location}'
-        response = requests.get(url)
-        response_html = BeautifulSoup(response.text, 'html.parser')
-        latitude = response_html.select('.latitude')[1].text.replace(",", ".")
-        longitude = response_html.select('.longitude')[1].text.replace(",", ".")
-        return [latitude, longitude]
+cursor = db_params.cursor()
+sql_show_users = "SELECT * FROM public.users"
+cursor.execute(sql_show_users)
+query_result = cursor.fetchall()
+for row in query_result:
+	print(row[0])
+	print(row[1])
+	print(row[2])
+	print(row[3])
+print(query_result)
 
-# https://pl.wikipedia.org/wiki/Kobyłka
 
-Ola = User(name="Ola", surname="Kurzyk", posts="366", location="Lublin")
-
-print(type(Ola.wspolrzedne[0]))
+# INSERT INTO public.users(
+#	name, surname, posts, location, wspolrzedne)
+#	VALUES ( 'Karol', 'Makowski', '10', 'Warszawa', 'SRID=4326;POINT(52.21 21.00)');

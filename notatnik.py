@@ -1,18 +1,26 @@
-users: list = [
+import psycopg2 as ps
 
-    {"name": "Julia", "surname": "Gotowiec", "posts": 1500, },
-    {"name": "Hubert", "surname": "Sybilski", "posts": 123456, },
-    {"name": "Adrian", "surname": "Dobrzański", "posts": 3, },
-    {"name": "Bartek", "surname": "Wyrzykowski", "posts": 666, }
-]
-def update_user(users: list):
-    imie = input("Podaj imie użytkownika, którego dane chcesz zmienić: ")
-    for user in users:
-        if user["name"] == imie:
 
-            user["name"] = input("Podaj nowe imię: ")
-            user["surname"] = input("Podaj nowe nazwisko: ")
-            user["posts"] = int(input("Podaj nową liczbę postów: "))
+db_params = ps.connect(
+	database="mapbook",
+	user="postgres",
+	password="geoinformatyka",
+	host="localhost",
+	port="5432"
+)
 
-update_user(users)
-print(users)
+cursor = db_params.cursor()
+sql_show_users = "SELECT * FROM public.users"
+cursor.execute(sql_show_users)
+query_result = cursor.fetchall()
+for row in query_result:
+	print(row[0])
+	print(row[1])
+	print(row[2])
+	print(row[3])
+print(query_result)
+
+
+# INSERT INTO public.users(
+#	name, surname, posts, location, wspolrzedne)
+#	VALUES ( 'Karol', 'Makowski', '10', 'Warszawa', 'SRID=4326;POINT(52.21 21.00)');
